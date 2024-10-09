@@ -1,7 +1,9 @@
-# taugle
+# Taugle
 
-# second commit: robert-dimitrov
+## Setup
+Create .env file with zoom sdk api keys
 
+TODO: Write further instructions on what env variables to put in env file and give example
 
 # React + TypeScript + Vite
 
