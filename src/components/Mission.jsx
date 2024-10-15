@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 
 
 function Mission() {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
-    const handleButtonClick = () => {
-      navigate('/chat'); // Programmatic navigation to the about page
-    };
+    // const handleButtonClick = () => {
+    //   navigate('/chat'); // Programmatic navigation to the about page
+    // };
 
   return (
     <section className="mission">
