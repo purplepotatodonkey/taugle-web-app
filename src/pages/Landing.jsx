@@ -5,14 +5,14 @@ import How from '../components/How.jsx'
 import Footer from '../components/Footer.jsx'
 
 function Landing() {
-    return (
-        <>
-            <Header/>
-            <Mission/>
-            <How/>
-            <Footer/>
-        </>
-    )
+  return (
+    <>
+      <Header/>
+      <Mission/>
+      <How/>
+      <Footer/>
+    </>
+  )
 }
 
 export default Landing

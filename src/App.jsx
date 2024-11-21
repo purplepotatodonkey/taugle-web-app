@@ -1,16 +1,16 @@
 import './App.css'
 import './index.css'
-// import {BrowserRouter as Router, Route, Routes, Link} from "react-router-dom"
-// import Landing from './components/pages/LandingPage.jsx'
-import Chat from './pages/ChatPage.jsx'
+import {BrowserRouter as Router, Route, Routes, Link} from "react-router-dom"
+import Landing from './pages/Landing.jsx'
+import Chat from './pages/Chat.jsx'
 
 function App() {
 
   return (
-    <>
-      {/* <Landing/> */}
-      <Chat/>
-    </>
+    <Routes>
+      <Route path="/" element={<Landing/>}/>
+      <Route path="/chat" element={<Chat/>}/>
+    </Routes>
   )
 }
 
