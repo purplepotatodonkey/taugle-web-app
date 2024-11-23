@@ -6,7 +6,7 @@ export default {
     './src/components/Mission.jsx',
     './src/components/How.jsx',
     './src/components/Footer.jsx',
-    './src/pages/ChatPage.jsx',
+    './src/pages/Chat.jsx',
     './src/App.jsx'
   ],
   theme: {
