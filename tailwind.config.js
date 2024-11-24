@@ -7,7 +7,7 @@ export default {
     './src/components/How.jsx',
     './src/components/Footer.jsx',
     './src/pages/Chat.jsx',
-    './src/App.jsx'
+    './src/App.jsx',
   ],
   theme: {
     extend: {
@@ -24,9 +24,8 @@ export default {
           500: '#9B6648', // Text for the heading
           800: '#5A3525', // Darker text for other elements
         },
-      }
+      },
     },
   },
   plugins: [],
 };
-
