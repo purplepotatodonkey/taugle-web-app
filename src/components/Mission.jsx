@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const Mission = () => {
   return (
@@ -33,9 +34,11 @@ const Mission = () => {
 
       {/* <!-- Button Section --> */}
       <div className="mt-8 pt-10">
-        <button className="bg-peachOrange text-lightBrown text-xl font-bold py-3 px-10 rounded-full border-4 border-lightBrown hover:bg-peach-400 transition duration-300">
-          Start A Chat
-        </button>
+        <NavLink to={'/chat'} end>
+          <button className="bg-peachOrange text-lightBrown text-xl font-bold py-3 px-10 rounded-full border-4 border-lightBrown hover:bg-peach-400 transition duration-300">
+            Start A Chat
+          </button>
+        </NavLink>
       </div>
 
       {/* <!-- Scroll Down Indicator --> */}

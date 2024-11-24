@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const How = () => {
   return (
@@ -59,9 +60,11 @@ const How = () => {
         Conversations Matter. Authenticity Matters.
       </h2>
       {/* <!-- Button --> */}
-      <button className="bg-transparent text-peachOrange text-xl font-bold py-3 px-10 rounded-full border-4 border-peachOrange hover:bg-peach-400 hover:text-darkBrown transition duration-300">
-        Begin
-      </button>
+      <NavLink to={'/chat'} end>
+        <button className="bg-transparent text-peachOrange text-xl font-bold py-3 px-10 rounded-full border-4 border-peachOrange hover:bg-peach-400 hover:text-darkBrown transition duration-300">
+          Begin
+        </button>
+      </NavLink>
     </div>
   );
 };
