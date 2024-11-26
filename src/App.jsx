@@ -1,8 +1,8 @@
 import './App.css';
 import './index.css';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import Landing from './pages/Landing.jsx';
-import Chat from './pages/Chat.jsx';
+import Landing from './pages/LandingPage';
+import Chat from './pages/ChatPage';
 
 function App() {
   return (

@@ -2,12 +2,7 @@
 export default {
   content: [
     './index.html',
-    './src/components/Header.jsx',
-    './src/components/Mission.jsx',
-    './src/components/How.jsx',
-    './src/components/Footer.jsx',
-    './src/pages/Chat.jsx',
-    './src/App.jsx',
+    './src/**/*.{js,jsx}',
   ],
   theme: {
     extend: {
