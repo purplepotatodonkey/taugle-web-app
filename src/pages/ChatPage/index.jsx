@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../../components/Header';
+import VideoStream from '../../features/videoChat/components/VideoStream';
 
 function Chat() {
   // State to track whether the chat menu is open or not
@@ -30,11 +31,8 @@ function Chat() {
 
       {/* Main Content Section */}
       <div className="flex flex-row h-[85%] p-10">
-        {/* Video Section */}
-        <div className={`h-full duration-300 ease-in-out ${isChatOpen ? 'w-2/3' : 'w-[96%]'} bg-gray-400 rounded-2xl`}>
-          <div className="relative w-full h-full">
-            <div className="absolute top-0 right-0 bg-gray-500 rounded-bl-2xl rounded-tr-2xl w-[30%] h-[30%]"></div>
-          </div>
+        <div className={`${isChatOpen ? 'w-2/3' : 'w-[96%]'} duration-300 ease-in-out `}>
+          <VideoStream className="rounded-2xl" />
         </div>
 
         {/* Chat Section */}
