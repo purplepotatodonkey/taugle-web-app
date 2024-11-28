@@ -1,6 +1,16 @@
 import React, { createContext, useRef } from 'react';
+import { io, Socket } from 'socket.io-client';
 
 export const VideoStreamContext = createContext();
+
+const configuration = {
+  iceServers: [
+    {
+      urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302"],
+    },
+  ],
+  iceCandidatePoolSize: 10,
+};
 
 const VideoStreamProvider = ({ children }) => {
   const socket = useRef(undefined);
@@ -9,7 +19,8 @@ const VideoStreamProvider = ({ children }) => {
   const peerConnection = useRef(undefined);
 
   async function initSocket() {
-    const socketInstance = io(process.env.SOCKET_SERVER_URL)
+    console.log("joseph checking SOCKET_SERVER_URL", import.meta.env.VITE_SOCKET_SERVER_URL);
+    const socketInstance = io(import.meta.env.VITE_SOCKET_SERVER_URL)
 
       socketInstance.on('connect', () => {
         console.log('Connected to Socket.IO server');
@@ -23,22 +34,6 @@ const VideoStreamProvider = ({ children }) => {
         console.error('Connection error:', error);
       });
 
-      socketInstance.on('offer', async (offer) => {
-        console.log('Offer received log:', offer);
-        await createAnswer(offer)
-      });
-
-      socketInstance.on('answer', async (answer) => {
-        console.log('Answer received log:', answer);
-        await setAnswer(answer); // Automatically set the answer when received
-      });
-
-      socketInstance.on('ice-candidate', async (candidate) => {
-        console.log('Received ice-candidate log:', candidate);
-        if (peerConnection.current) {
-          peerConnection.current.addIceCandidate(new RTCIceCandidate(candidate));
-        }
-      });
       console.log("socketInstance in initSocket:", socketInstance)
       socket.current = socketInstance;
       console.log("socket.current in initSocket:", socket.current)
@@ -88,7 +83,26 @@ const VideoStreamProvider = ({ children }) => {
     peerConnection.current.ontrack = (e) => {
       e.streams[0].getTracks().forEach((track) => remoteStream.current.addTrack(track));
     };
-  
+  }
+
+  async function connectPeerConnectionToSocket() {
+    socket.current.on('offer', async (offer) => {
+      console.log('Offer received log:', offer);
+      await createAnswer(offer)
+    });
+
+    socket.current.on('answer', async (answer) => {
+      console.log('Answer received log:', answer);
+      await setAnswer(answer); // Automatically set the answer when received
+    });
+
+    socket.current.on('ice-candidate', async (candidate) => {
+      console.log('Received ice-candidate log:', candidate);
+      if (peerConnection.current) {
+        peerConnection.current.addIceCandidate(new RTCIceCandidate(candidate));
+      }
+    });
+
     peerConnection.current.onicecandidate = (e) => {
       if (e.candidate) {
         socket.current.emit('ice-candidate', e.candidate);
@@ -104,8 +118,9 @@ const VideoStreamProvider = ({ children }) => {
       initLocalStream,
       remoteStream,
       initRemoteStream,
-      pc: peerConnection,
+      peerConnection,
       initPeerConnection,
+      connectPeerConnectionToSocket,
     }}>
       {children}
     </VideoStreamContext.Provider>

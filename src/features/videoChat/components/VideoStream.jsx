@@ -2,13 +2,20 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { VideoStreamContext } from '../providers/VideoStreamProvider';
 
 const VideoStream = () => {
-  const { localStream, initLocalStream, remoteStream, initRemoteStream } = useContext(VideoStreamContext);
+  const { initLocalStream, initRemoteStream, initSocket, initPeerConnection, connectPeerConnectionToSocket } = useContext(VideoStreamContext);
   const userVideoRef = useRef(undefined);
   const remoteVideoRef = useRef(undefined);
 
   useEffect(() => {
-    initLocalStream(userVideoRef);
-    initRemoteStream(remoteVideoRef);
+    async function initVideoStream() {
+      await initLocalStream(userVideoRef);
+      await initRemoteStream(remoteVideoRef);
+      await initSocket();
+      await initPeerConnection();
+      await connectPeerConnectionToSocket();
+    }
+
+    initVideoStream();
   }, []);
 
   return (
