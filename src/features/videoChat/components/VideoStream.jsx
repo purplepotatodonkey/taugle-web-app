@@ -17,10 +17,6 @@ const VideoStream = () => {
     }
 
     initVideoStream();
-
-    return () => {
-      socket.current.disconnect();
-    };
   }, []);
 
   return (
