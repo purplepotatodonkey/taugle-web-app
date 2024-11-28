@@ -19,7 +19,6 @@ const VideoStreamProvider = ({ children }) => {
   const peerConnection = useRef(undefined);
 
   async function initSocket() {
-    console.log('joseph checking SOCKET_SERVER_URL', import.meta.env.VITE_SOCKET_SERVER_URL);
     const socketInstance = io(import.meta.env.VITE_SOCKET_SERVER_URL);
 
     socketInstance.on('connect', () => {
@@ -34,9 +33,7 @@ const VideoStreamProvider = ({ children }) => {
       console.error('Connection error:', error);
     });
 
-    console.log('socketInstance in initSocket:', socketInstance);
     socket.current = socketInstance;
-    console.log('socket.current in initSocket:', socket.current);
   }
 
   async function initLocalStream(videoRef) {
@@ -60,12 +57,12 @@ const VideoStreamProvider = ({ children }) => {
     }
   }
 
-  async function initRemoteStream(VideoRef) {
+  async function initRemoteStream(videoRef) {
     remoteStream.current = new MediaStream();
     console.log('Remote stream is on');
 
-    if (VideoRef) {
-      VideoRef.srcObject = remoteStream.current;
+    if (videoRef) {
+      videoRef.srcObject = remoteStream.current;
     }
   }
 
@@ -105,6 +102,7 @@ const VideoStreamProvider = ({ children }) => {
 
     peerConnection.current.onicecandidate = (e) => {
       if (e.candidate) {
+        console.log("Sending ice candidate to server", e.candidate);
         socket.current.emit('ice-candidate', e.candidate);
       }
     };
@@ -115,12 +113,8 @@ const VideoStreamProvider = ({ children }) => {
       let answer = await peerConnection.current.createAnswer();
       await peerConnection.current.setLocalDescription(answer);
 
-      document.getElementById('answer-sdp').value = JSON.stringify(answer);
-      console.log('createAnswer is hit');
-      console.log('socket.current:', socket.current);
-
       if (socket.current) {
-        console.log('createAnswer is hit and socket exists');
+        console.log('Sending answer to server:', answer);
         socket.current.emit('answer', answer);
       } else {
         console.error('Socket not initialized');
@@ -128,25 +122,19 @@ const VideoStreamProvider = ({ children }) => {
     };
 
     socket.current.on('offer', async (offer) => {
-      console.log('Offer received log:', offer);
       await createAnswer(offer);
     });
 
     let setAnswer = async (answer) => {
-      console.log('Joseph checking answer:', answer);
       if (!peerConnection.current) {
         console.error('Peer connection not initialized');
         return;
       }
 
-      console.log('Current connection state:', peerConnection.current.signalingState);
-
       // Only proceed if we're in have-local-offer state
       if (peerConnection.current.signalingState === 'have-local-offer') {
         try {
           await peerConnection.current.setRemoteDescription(new RTCSessionDescription(answer));
-          console.log('Remote description set from answer.');
-          console.log('New connection state:', peerConnection.current.signalingState);
         } catch (error) {
           console.error('Error setting remote description:', error);
         }
@@ -162,18 +150,11 @@ const VideoStreamProvider = ({ children }) => {
   }
 
   let createOffer = async () => {
-    console.log('Joseph checking createOffer');
-    console.log('Joseph checking peerConnection:', peerConnection.current);
-    let offer = await pc.current.createOffer();
-    console.log('Joseph checking offer:', offer);
+    let offer = await peerConnection.current.createOffer();
     await peerConnection.current.setLocalDescription(offer);
 
-    console.log('New connection state:', peerConnection.current.signalingState);
-
-    document.getElementById('offer-sdp').value = JSON.stringify(offer);
-
     if (socket.current) {
-      console.log('Sending offer to the server');
+      console.log('Sending offer to the server:', offer);
       socket.current.emit('offer', offer);
     } else {
       console.error('Socket not initialized');

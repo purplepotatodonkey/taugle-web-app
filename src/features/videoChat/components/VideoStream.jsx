@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { VideoStreamContext } from '../providers/VideoStreamProvider';
 
 const VideoStream = () => {
-  const { initLocalStream, initRemoteStream, initSocket, initPeerConnection, connectPeerConnectionToSocket } =
+  const { socket, initLocalStream, initRemoteStream, initSocket, initPeerConnection, connectPeerConnectionToSocket } =
     useContext(VideoStreamContext);
   const userVideoRef = useRef(undefined);
   const remoteVideoRef = useRef(undefined);
@@ -17,6 +17,10 @@ const VideoStream = () => {
     }
 
     initVideoStream();
+
+    return () => {
+      socket.current.disconnect();
+    };
   }, []);
 
   return (
