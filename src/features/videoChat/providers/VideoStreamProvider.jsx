@@ -108,7 +108,7 @@ const VideoStreamProvider = ({ children }) => {
     });
 
     socket.current.on('ice-candidate', async (candidate) => {
-      console.log('Received ice-candidate log:', candidate);
+      // console.log('Received ice-candidate log:', candidate);
       if (peerConnection.current) {
         peerConnection.current.addIceCandidate(new RTCIceCandidate(candidate));
       }
@@ -116,7 +116,7 @@ const VideoStreamProvider = ({ children }) => {
 
     peerConnection.current.onicecandidate = (e) => {
       if (e.candidate) {
-        console.log('Sending ice candidate to server', e.candidate);
+        // console.log('Sending ice candidate to server', e.candidate);
         socket.current.emit('ice-candidate', e.candidate);
       }
     };
