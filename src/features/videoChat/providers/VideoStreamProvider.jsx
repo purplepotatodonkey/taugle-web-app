@@ -61,8 +61,8 @@ const VideoStreamProvider = ({ children }) => {
     remoteStream.current = new MediaStream();
     console.log('Remote stream is on');
 
-    if (videoRef) {
-      videoRef.srcObject = remoteStream.current;
+    if (videoRef.current) {
+      videoRef.current.srcObject = remoteStream.current;
     }
   }
 
