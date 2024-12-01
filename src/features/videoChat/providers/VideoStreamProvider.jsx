@@ -75,6 +75,20 @@ const VideoStreamProvider = ({ children }) => {
     peerConnection.current = new RTCPeerConnection(configuration);
     console.log('Peer connection has been created.');
 
+    peerConnection.current.addEventListener('signalingstatechange', () => {
+      const state = peerConnection.current.signalingState;
+      console.warn('Signaling state changed:', state);
+
+      // Optional: Handle specific state transitions
+      if (state === 'stable') {
+        console.warn('Signaling state is now stable.');
+      } else if (state === 'have-local-offer') {
+        console.warn('Local offer has been set.');
+      } else if (state === 'have-remote-offer') {
+        console.warn('Remote offer has been set.');
+      }
+    });
+
     localStream.current.getTracks().forEach((track) => peerConnection.current.addTrack(track, localStream.current));
 
     peerConnection.current.ontrack = (e) => {
@@ -102,16 +116,18 @@ const VideoStreamProvider = ({ children }) => {
 
     peerConnection.current.onicecandidate = (e) => {
       if (e.candidate) {
-        console.log("Sending ice candidate to server", e.candidate);
+        console.log('Sending ice candidate to server', e.candidate);
         socket.current.emit('ice-candidate', e.candidate);
       }
     };
 
     let createAnswer = async (offer) => {
       await peerConnection.current.setRemoteDescription(new RTCSessionDescription(offer));
+      console.log('*************** Remote Description is set to offer');
 
       let answer = await peerConnection.current.createAnswer();
       await peerConnection.current.setLocalDescription(answer);
+      console.log('*************** Local Description is set to answer');
 
       if (socket.current) {
         console.log('Sending answer to server:', answer);
@@ -120,10 +136,6 @@ const VideoStreamProvider = ({ children }) => {
         console.error('Socket not initialized');
       }
     };
-
-    socket.current.on('offer', async (offer) => {
-      await createAnswer(offer);
-    });
 
     let setAnswer = async (answer) => {
       if (!peerConnection.current) {
@@ -135,6 +147,7 @@ const VideoStreamProvider = ({ children }) => {
       if (peerConnection.current.signalingState === 'have-local-offer') {
         try {
           await peerConnection.current.setRemoteDescription(new RTCSessionDescription(answer));
+          console.log('*************** Remote Description is set to answer');
         } catch (error) {
           console.error('Error setting remote description:', error);
         }
@@ -142,16 +155,12 @@ const VideoStreamProvider = ({ children }) => {
         console.error('Cannot set remote description in current state:', peerConnection.current.signalingState);
       }
     };
-
-    socket.current.on('answer', async (answer) => {
-      console.log('Answer received log:', answer);
-      await setAnswer(answer); // Automatically set the answer when received
-    });
   }
 
   let createOffer = async () => {
     let offer = await peerConnection.current.createOffer();
     await peerConnection.current.setLocalDescription(offer);
+    console.log('*************** Local Description is set to offer');
 
     if (socket.current) {
       console.log('Sending offer to the server:', offer);
