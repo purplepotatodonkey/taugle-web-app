@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
-import Header from '../../components/Header';
-import VideoStream from '../../features/videoChat/components/VideoStream';
-import { VideoStreamContext } from '../../features/videoChat/providers/VideoStreamProvider';
+import Header from '@/components/Header';
+import VideoStream from '@/features/videoChat/components/VideoStream';
+import { VideoStreamContext } from '@/features/videoChat/providers/VideoStreamProvider';
 
 function Chat() {
   // State to track whether the chat menu is open or not

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { VideoStreamContext } from '../providers/VideoStreamProvider';
+import { VideoStreamContext } from '@/features/videoChat/providers/VideoStreamProvider';
 
 const VideoStream = () => {
   const { socket, initLocalStream, initRemoteStream, initSocket, initPeerConnection, connectPeerConnectionToSocket } =

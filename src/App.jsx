@@ -1,9 +1,9 @@
 import './App.css';
 import './index.css';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import Landing from './pages/LandingPage';
-import Chat from './pages/ChatPage';
-import VideoStreamProvider from './features/videoChat/providers/VideoStreamProvider';
+import Landing from '@/pages/LandingPage';
+import Chat from '@/pages/ChatPage';
+import VideoStreamProvider from '@/features/videoChat/providers/VideoStreamProvider';
 
 function App() {
   return (
